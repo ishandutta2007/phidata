@@ -1,4 +1,4 @@
-<h1 align="center">
+<h1 align="center" id="top">
   phidata
 </h1>
 
@@ -132,7 +132,7 @@ python agent_team.py
 
 ## Reasoning Agents
 
-Reasoning helps agents work through a problem step-by-step, backtracking and correcting as needed. Let's give the reasonining agent a simple task that gpt-4o fails at. Create a file `reasoning_agent.py`
+Reasoning helps agents work through a problem step-by-step, backtracking and correcting as needed. Let's give the reasoning agent a simple task that gpt-4o fails at. Create a file `reasoning_agent.py`
 
 ```python
 from phi.agent import Agent
@@ -487,3 +487,14 @@ We're an open-source project and welcome contributions, please read the [contrib
 
 - If you have a feature request, please open an issue or make a pull request.
 - If you have ideas on how we can improve, please create a discussion.
+
+## Telemetry
+
+Phidata logs which model an agent used so we can prioritize features for the most popular models.
+
+You can disable this by setting `PHI_TELEMETRY=false` in your environment.
+
+
+<p align="right">
+  <a href="#top">⬆️ Back to Top</a>
+</p>

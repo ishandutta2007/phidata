@@ -873,7 +873,7 @@ class Agent(BaseModel):
         if self.memory.create_user_memories:
             if self.memory.memories and len(self.memory.memories) > 0:
                 system_message_lines.append(
-                    "You have access to memory from previous interactions with the user that you can use:"
+                    "You have access to memories from previous interactions with the user that you can use:"
                 )
                 system_message_lines.append("### Memories from previous interactions")
                 system_message_lines.append("\n".join([f"- {memory.memory}" for memory in self.memory.memories]))
@@ -884,10 +884,12 @@ class Agent(BaseModel):
                 system_message_lines.append("If you need to update the long-term memory, use the `update_memory` tool.")
             else:
                 system_message_lines.append(
-                    "You also have access to memory from previous interactions with the user but the user has no memories yet."
+                    "You have the capability to retain memories from previous interactions with the user, "
+                    "but have not had any interactions with the user yet."
                 )
                 system_message_lines.append(
-                    "If the user asks about memories, you can let them know that you dont have any memory about the yet, but can add new memories using the `update_memory` tool."
+                    "If the user asks about previous memories, you can let them know that you dont have any memory about the user yet because you have not had any interactions with them yet, "
+                    "but can add new memories using the `update_memory` tool."
                 )
             system_message_lines.append(
                 "If you use the `update_memory` tool, remember to pass on the response to the user.\n"
@@ -1181,10 +1183,12 @@ class Agent(BaseModel):
     def get_reasoning_agent(self, model: Optional[Model] = None) -> Agent:
         return Agent(
             model=model,
-            description="You are a meticulous and thoughtful assistant that solves complex problems by reasoning through them step-by-step.",
+            description="You are a meticulous and thoughtful assistant that solves a problem by thinking through it step-by-step.",
             instructions=[
-                "First - Analyze the task: carefully examine the task and develop multiple step-by-step plans to solve it.",
-                "Then work through each plans step-by-step, executing any tools as needed. For each step, provide:\n"
+                "First - Carefully analyze the task by spelling it out loud.",
+                "Then, break down the problem by thinking through it step by step and develop multiple strategies to solve the problem."
+                "Then, examine the users intent develop a step by step plan to solve the problem.",
+                "Work through your plan step-by-step, executing any tools as needed. For each step, provide:\n"
                 "  1. Title: A clear, concise title that encapsulates the step's main focus or objective.\n"
                 "  2. Action: Describe the action you will take in the first person (e.g., 'I will...').\n"
                 "  3. Result: Execute the action by running any necessary tools or providing an answer. Summarize the outcome.\n"
@@ -1201,13 +1205,12 @@ class Agent(BaseModel):
                 "  6. Confidence score: A score from 0.0 to 1.0 reflecting your certainty about the action and its outcome.",
                 "Handling Next Actions:\n"
                 "  - If next_action is continue, proceed to the next step in your analysis.\n"
-                "  - If next_action is validate, validate the result of the action and provide the final answer.\n"
+                "  - If next_action is validate, validate the result and provide the final answer.\n"
                 "  - If next_action is final_answer, stop reasoning.",
                 "Remember - If next_action is validate, you must validate your result\n"
-                "  - Ensure your result solves the original task.\n"
+                "  - Ensure the answer resolves the original request.\n"
                 "  - Validate your result using any necessary tools or methods.\n"
                 "  - If there is another method to solve the task, use that to validate the result.\n"
-                "  - If the result is incorrect, correct it and provide the final answer.",
                 "Ensure your analysis is:\n"
                 "  - Complete: Validate results and run all necessary tools.\n"
                 "  - Comprehensive: Consider multiple angles and potential outcomes.\n"
@@ -1218,7 +1221,7 @@ class Agent(BaseModel):
                 "  - Remember to run any tools you need to solve the problem.\n"
                 f"  - Take at least {self.reasoning_min_steps} steps to solve the problem.\n"
                 "  - If you have all the information you need, provide the final answer.\n"
-                "  - Remember to run any tools you need to run to solve the problem.",
+                "  - IMPORTANT: IF AT ANY TIME THE RESULT IS WRONG, RESET AND START OVER.",
             ],
             tools=self.tools,
             show_tool_calls=False,
