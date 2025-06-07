@@ -223,7 +223,6 @@ class Model(ABC):
     # True if the Model requires a json_schema for structured outputs (e.g. LMStudio)
     supports_json_schema_outputs: bool = False
 
-
     # Controls which (if any) function is called by the model.
     # "none" means the model will not call a function and instead generates a message.
     # "auto" means the model can pick between generating a message or calling a function.
@@ -799,8 +798,6 @@ class Model(ABC):
                     self.format_function_call_results(
                         messages=messages, function_call_results=function_call_results, **stream_data.extra
                     )
-                    for function_call_result in function_call_results:
-                        function_call_result.log(metrics=True)
                 else:
                     self.format_function_call_results(messages=messages, function_call_results=function_call_results)
 
@@ -935,8 +932,6 @@ class Model(ABC):
                     self.format_function_call_results(
                         messages=messages, function_call_results=function_call_results, **stream_data.extra
                     )
-                    for function_call_result in function_call_results:
-                        function_call_result.log(metrics=True)
                 else:
                     self.format_function_call_results(messages=messages, function_call_results=function_call_results)
 
